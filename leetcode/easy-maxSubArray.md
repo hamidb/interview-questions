@@ -18,7 +18,7 @@ the divide and conquer approach, which is more subtle.
 
 ### Solution:
 
-```
+```python
 class Solution:
     def maxSubArray(self, nums: List[int]) -> int:
         size = len(nums)
