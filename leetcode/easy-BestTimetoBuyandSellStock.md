@@ -24,6 +24,9 @@ Explanation: In this case, no transaction is done, i.e. max profit = 0.
 ```
 
 ### Solution
+
+![O(n) approach](images/image0002.png)
+
 ```python
 class Solution:
 #  O(n^2)
