@@ -48,7 +48,4 @@ class Solution:
             return root
         # otherwise, LCA is somewhere in the left subtree
         return self.lowestCommonAncestor(root.left, p, q)
-
-
-
 ```
