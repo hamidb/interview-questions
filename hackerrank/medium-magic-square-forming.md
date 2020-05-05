@@ -74,7 +74,7 @@ then the total cost will be .
 
 Solution
 ========
-![explanation](images/image0006.png)
+[![Magic square explanation](https://img.youtube.com/vi/zPnN046OM34/0.jpg)](https://www.youtube.com/watch?v=zPnN046OM34)
 
 ```python
 #!/bin/python3
