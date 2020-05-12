@@ -130,23 +130,3 @@ if __name__ == '__main__':
   assert heap.heap == [-5, 1, -3, 9, 2]
   assert heap.contains(9)
   assert heap.contains(49) == False
-
-#  lst.insertAt(3, 1)
-#  lst.print()
-#  lst.insertAt(4, 2)
-#  lst.print()
-#  assert 2 == lst.peek(0)
-#  assert 1 == lst.peek(1)
-#  assert 4 == lst.peek(3)
-#  assert 2 == lst.pop(0)
-#  assert 4 == lst.pop(2)
-#  lst.print()
-#  lst.append(1)
-#  lst.append(5)
-#  lst.append(7)
-#  lst.print()
-#  assert 4 == lst.find(7)
-#  assert -1 == lst.find(-7)
-#  assert not lst.contains(-7)
-#  assert lst.contains(7)
-#
