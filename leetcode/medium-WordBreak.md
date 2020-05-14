@@ -1,70 +1,81 @@
-Word Break (Leetcode #139)
+As Far from Land as Possible (Leetcode #1162)
 ===============================
 ### Medium
+Given an `N x N` grid containing only values `0` and `1`, where `0` represents water and `1` represents land, find a water cell such that its distance to the nearest land cell is maximized and return the distance.
 
-Given a non-empty string s and a dictionary wordDict containing a list of non-empty words, determine if s can be segmented into a space-separated sequence of one or more dictionary words.
+The distance used in this problem is the Manhattan distance: the distance between two cells `(x0, y0)` and `(x1, y1)` is `|x0 - x1| + |y0 - y1|`.
 
-Note:
+If no land or water exists in the grid, return `-1`.
 
-The same word in the dictionary may be reused multiple times in the segmentation.
-You may assume the dictionary does not contain duplicate words.
 ### Example 1:
+```
+1  0  1
+0  0  0
+1  0  1
+```
+```
+Input: [[1,0,1],[0,0,0],[1,0,1]]
+Output: 2
+```
+Explanation:
 
-```
-Input: s = "leetcode", wordDict = ["leet", "code"]
-Output: true
-```
-Explanation: Return true because "leetcode" can be segmented as "leet code".
+The cell `(1, 1)` is as far as possible from all the land with distance `2`.
 ### Example 2:
 ```
-Input: s = "applepenapple", wordDict = ["apple", "pen"]
-Output: true
+1  0  0
+0  0  0
+0  0  0
 ```
-Explanation: Return true because "applepenapple" can be segmented as "apple pen apple".
-             Note that you are allowed to reuse a dictionary word.
-### Example 3:
 ```
-Input: s = "catsandog", wordDict = ["cats", "dog", "sand", "and", "cat"]
-Output: false
+Input: [[1,0,0],[0,0,0],[0,0,0]]
+Output: 4
+```
+Explanation:
+
+The cell `(2, 2)` is as far as possible from all the land with distance `4`.
+
+### Note:
+
+```
+1 <= grid.length == grid[0].length <= 100
+grid[i][j] is 0 or 1
 ```
 
 Solution
 ========
-![Bottom up approach](images/image0009.png)
-![Memoization approach](images/image0010.png)
+![Explanation](images/image0011.png)
 
 ```python
+import deque
+
 class Solution:
-# O(n^2) (Memoization)
-#     def wordBreak(self, s: str, wordDict: List[str]) -> bool:
-#         seen = {}
-#         return self._wordBreak(s, wordDict, seen)
+    def maxDistance(self, grid: List[List[int]]) -> int:
+        rows = len(grid)
+        cols = len(grid[0]) if rows else 0
+        if rows == 0 or cols == 0:
+            return -1
 
-#     def _wordBreak(self, s: str, wordDict: List[str], seen) -> bool:
-#         if s in wordDict:
-#             return True
-#         if s in seen:
-#             return seen[s]
-#         for i in range(len(s)):
-#             if s[0:i+1] in wordDict and self._wordBreak(s[i+1:], wordDict, seen):
-#                 seen[s[i+1:]] = True
-#                 return True
-#         seen[s] = False
-#         return False
+        visited = [[0 for _ in range(cols)] for _ in range(rows)]
+        q = deque()
+        max_dist = -1
 
-# O(n^2) (DP bottom up)
-    def wordBreak(self, s: str, wordDict: List[str]) -> bool:
-        if s in wordDict:
-            return True
-        wb = [False for _ in range(0, len(s)+1)]
-        wb[0] = True
-        for i in range(1, len(s)+1):
-            if s[0:i] in wordDict:
-                wb[i] = True
-                continue
-            for j in range(0, i):
-                if wb[j] and s[j:i] in wordDict:
-                    wb[i] = True
-                    break
-        return wb[-1]
+        for i in range(rows):
+            for j in range(cols):
+                if grid[i][j] == 1:
+                    q.append((i, j, 0))
+        if not q or len(q) == rows*cols:
+            return -1
+
+        while q:
+            (i, j, dist) = q.popleft()
+            max_dist = max(max_dist, dist)
+            visited[i][j] = 1
+            for dx, dy in [[-1, 0],[1, 0],[0, 1],[0, -1]]:
+                x, y = i+dx, j+dy
+                if x < 0 or y < 0 or x >= len(grid) or y >= len(grid[0]) or visited[x][y] == 1:
+                    continue
+                visited[x][y] = 1
+                q.append((x, y, dist+1))
+
+        return max_dist if max_dist > 0 else -1
 ```
