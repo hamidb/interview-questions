@@ -37,6 +37,9 @@ class BinaryHeap:
     self.heap.append(data)
     self._trickleUp(self.size-1)
 
+  def poll(self):
+    return removeAt(0)
+
   def removeAt(self, pos):
     assert pos < self.size
     self._swap(pos, self.size-1)
@@ -60,7 +63,6 @@ class BinaryHeap:
   def find(self, key):
     for i in range(self.size):
       if self.compare(self.heap[i], key) == 0:
-        return i
     return -1
 
   def contains(self, key):
