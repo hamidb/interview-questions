@@ -21,3 +21,7 @@ class Graph:
     assert self.size > 0
     assert origin < self.size
     return self.graph.get(origin)
+
+  def add_undirected_edge(self, origin, to, w):
+    self.add_edge(origin, to, w)
+    self.add_edge(to, origin, w)
