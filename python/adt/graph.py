@@ -17,6 +17,10 @@ class Graph:
     assert origin < self.size and to < self.size
     self.graph[origin].append(self.Edge(origin, to, w))
 
+  def get_nodes(self):
+    assert self.size > 0
+    return self.graph.keys()
+
   def get_edges(self, origin):
     assert self.size > 0
     assert origin < self.size
