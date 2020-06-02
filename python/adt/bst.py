@@ -110,6 +110,16 @@ class BST(object):
     return max(left_depth, right_depth) + 1
 
   @staticmethod
+  def get_lowest_common_ancestor(root, p, q):
+    if p is None or q is None or root is None:
+      return None
+    if p.data < root.data and q.data < root.data:
+      return BST.lowest_common_ancestor(root.left, p, q)
+    if p.data > root.data and q.data > root.data:
+      return BST.lowest_common_ancestor(root.right, p, q)
+    return root
+
+  @staticmethod
   def get_inorder_successor(node):
     if not node or not node.right:
       return None
