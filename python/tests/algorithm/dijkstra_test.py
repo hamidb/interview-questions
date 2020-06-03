@@ -1,5 +1,5 @@
 # Lint as: python3
-"""Tests for binary_heap."""
+"""Tests for dijkstra."""
 
 from __future__ import absolute_import
 from __future__ import division
