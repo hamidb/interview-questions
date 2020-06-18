@@ -124,6 +124,19 @@ class DoublyLinkedList:
         i += 1
     return self.remove(tmp)
 
+  def reverse(self):
+    head = self.head
+    if head is None or head.next is None:
+      return head
+    ptr0, ptr1, ptr2 = None, head, None
+    while ptr1:
+      ptr2 = ptr1.next
+      ptr1.next = ptr0
+      # next iter
+      ptr0 = ptr1
+      ptr1 = ptr2
+    self.head = ptr0
+
   def traverse(self):
     trav = self.head
     output = []

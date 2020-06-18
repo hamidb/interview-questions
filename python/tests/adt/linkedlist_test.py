@@ -38,6 +38,16 @@ class LinkedListTest(unittest.TestCase):
     self.assertEqual(-1, lst.find(7))
     self.assertFalse(lst.contains(-7))
 
+  def test_linkedlist_03(self):
+    lst = linkedlist.DoublyLinkedList()
+    lst.append(1)
+    lst.append(2)
+    lst.append(3)
+    lst.append(4)
+    lst.append(5)
+    lst.reverse()
+    self.assertEqual(lst.traverse(), [5, 4, 3, 2, 1])
+
 
 if __name__ == '__main__':
   unittest.main()
