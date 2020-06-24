@@ -61,6 +61,8 @@ Search on the capacity space and check if all packages can be ship within `D` da
 ### Python
 ```python
 class Solution:
+    # Time : O(WlogN)
+    # Space : O(1)
     def shipWithinDays(self, weights: List[int], D: int) -> int:
         len_w = len(weights)
         if len_w == 0: return 0
@@ -94,6 +96,8 @@ class Solution:
 ```c++
 class Solution {
 public:
+    // Time : O(WlogN)
+    // Space : O(1)
     int shipWithinDays(vector<int>& weights, int D) {
         int lo = -0xffffffff;
         int hi = 0;
