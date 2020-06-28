@@ -31,7 +31,7 @@ p and q are different and both values will exist in the binary tree.
 Solution
 ========
 Keep searching until we find both nodes while keeping all searched nodes parent in a dictionary.
-Then we can build p's ancestor and search q in p's ancestor.
+Then we can build p's ancestor and search q or q's ancestors in p's ancestor.
 
 ```python
 # Definition for a binary tree node.
