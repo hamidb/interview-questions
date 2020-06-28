@@ -89,9 +89,9 @@ class Solution:
             n = (n & a4) + (n>>8 & a4)
             return (n & a5) + (n>>16 & a5)
         diff = (a | b) ^ c
-        a_one = a & diff
-        b_one = b & diff
-        zeros = ~(a|b) & diff
+        a_one = a & diff  # from the bits that were different which are 1s in a, they must all be flipped to 0
+        b_one = b & diff  # from the bits that were different which are 1s in b, they must all be flipped to 0
+        zeros = ~(a|b) & diff  # from the bits that were different which zeros in both a and b, they must be flipped in either a or b
         # When we see a difference, count a's one + count b's one + count both zeros 
         return count(a_one)+count(b_one)+count(zeros)
 ```
