@@ -36,39 +36,51 @@ Solution
 #         self.val = val
 #         self.left = left
 #         self.right = right
-class Solution:
-    def flipEquiv(self, root1: TreeNode, root2: TreeNode) -> bool:
-        # one None the other not None -> False
-        if (not root1 and root2) or (not root2 and root1):
-            return False
-        # both are None -> True
-        if root1 is None and root2 is None:
-            return True
-        if root1.val != root2.val:
-            return False
+# class Solution:
+#     def flipEquiv(self, root1: TreeNode, root2: TreeNode) -> bool:
+#         # one None the other not None -> False
+#         if (not root1 and root2) or (not root2 and root1):
+#             return False
+#         # both are None -> True
+#         if root1 is None and root2 is None:
+#             return True
+#         if root1.val != root2.val:
+#             return False
             
-        if self.equalChildren(root1.left, root2.left, root1.right, root2.right):
-            res = self.flipEquiv(root1.left, root2.left)
-            return res and self.flipEquiv(root1.right, root2.right)
-        elif self.equalChildren(root1.left, root2.right, root1.right, root2.left):
-            res = self.flipEquiv(root1.left, root2.right)
-            return res and self.flipEquiv(root1.right, root2.left)
-        else:
-            return False
+#         if self.equalChildren(root1.left, root2.left, root1.right, root2.right):
+#             res = self.flipEquiv(root1.left, root2.left)
+#             return res and self.flipEquiv(root1.right, root2.right)
+#         elif self.equalChildren(root1.left, root2.right, root1.right, root2.left):
+#             res = self.flipEquiv(root1.left, root2.right)
+#             return res and self.flipEquiv(root1.right, root2.left)
+#         else:
+#             return False
     
-    def equalChildren(self, l1, l2, r1, r2):
-        if l1:
-            if l2 is None or l1.val != l2.val:
-                return False
-        else:
-            if l2 is not None:
-                return False
-        if r1:
-            if r2 is None or r1.val != r2.val:
-                return False
-        else:
-            if r2 is not None:
-                return False
-        return True
+#     def equalChildren(self, l1, l2, r1, r2):
+#         if l1:
+#             if l2 is None or l1.val != l2.val:
+#                 return False
+#         else:
+#             if l2 is not None:
+#                 return False
+#         if r1:
+#             if r2 is None or r1.val != r2.val:
+#                 return False
+#         else:
+#             if r2 is not None:
+#                 return False
+#         return True
+            
+class Solution(object):
+    def flipEquiv(self, root1, root2):
+        if root1 is root2:
+            return True
+        if not root1 or not root2 or root1.val != root2.val:
+            return False
+
+        return (self.flipEquiv(root1.left, root2.left) and
+                self.flipEquiv(root1.right, root2.right) or
+                self.flipEquiv(root1.left, root2.right) and
+                self.flipEquiv(root1.right, root2.left))
             
 ```
