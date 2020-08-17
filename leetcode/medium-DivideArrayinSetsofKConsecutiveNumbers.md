@@ -47,13 +47,12 @@ This question is the same as 846: https://leetcode.com/problems/hand-of-straight
 Solution
 ========
 ```python
-
 # O(nlogn)
 class Solution:
     def isPossibleDivide(self, nums: List[int], k: int) -> bool:
         count = collections.Counter(nums)
         hand = sorted(nums)
-        for key in enumerate(hand):
+        for key in hand:
             if count.get(key, 0) == 0: continue
             for m in range(key, key+k):
                 if count.get(m, 0) == 0:
