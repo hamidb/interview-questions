@@ -35,21 +35,18 @@ class Solution:
     def levelOrderBottom(self, root: TreeNode) -> List[List[int]]:
         if root is None:
             return []
-
         queue = [root]
-        stacked_results = []
+        ans = []
         while queue:
-            queue_tmp = []
             vals = []
-            while queue:
+            for _ in range(len(queue)):
                 q = queue.pop(0)
                 vals.append(q.val)
                 if q.left:
-                    queue_tmp.append(q.left)
+                    queue.append(q.left)
                 if q.right:
-                    queue_tmp.append(q.right)
-            queue = queue_tmp
-            stacked_results.append(vals)
-        return stacked_results[::-1]
+                    queue.append(q.right)
+            ans.append(vals)
+        return ans[::-1]
 ```
 
