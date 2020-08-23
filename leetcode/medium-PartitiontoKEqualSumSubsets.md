@@ -41,7 +41,9 @@ Another speedup is we could sort the array nums, so that we try to place the lar
 
 ```python
 class Solution(object):
-# Time Complexity: O(k^{N-k} k!), where N is the length of nums. As we skip additional zeroes in groups, naively we will make O(k!) calls to search, then an additional O(k^{N-k}) calls after every element of groups is nonzero.
+# Time Complexity: O(k^{N-k} k!), where N is the length of nums. As we skip additional zeroes in groups, 
+# naively we will make O(k!) calls to search, then an additional O(k^{N-k}) calls after every element
+# of groups is nonzero.
 # Space Complexity: O(N), the space used by recursive calls to search in our call stack.
 
     def canPartitionKSubsets(self, nums, k):
