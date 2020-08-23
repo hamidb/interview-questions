@@ -29,13 +29,13 @@ Solution
 ========
 ### Approach #5 Using Cumulative Sum and HashSet [Accepted]
 #### Algorithm
-In this approach, firstly we form a cumulative sum array sumsum, where `sum[i]sum[i]` stores the cumulative sum of the array numsnums upto the i_th index. Then, we start by traversing over the possible positions for the middle cut formed by `j`. 
-For every `j`, firstly, we find all the left cut's positions, `i`, that lead to equalizing the sum of the first and the second part (i.e. `sum[i-1] = sum [j-1] - sum[i]sum[i−1]=sum[j−1]−sum[i]`) and 
+In this approach, firstly we form a cumulative sum array sumsum, where `sum[i]` stores the cumulative sum of the array numsnums upto the i_th index. Then, we start by traversing over the possible positions for the middle cut formed by `j`. 
+For every `j`, firstly, we find all the left cut's positions, `i`, that lead to equalizing the sum of the first and the second part (i.e. `sum[i-1] = sum [j-1] - sum[i]`) and 
 store such sums in the setset (a new HashSet is formed for every `j` chosen). Thus, the presence of a sum in setset implies that such a sum is possible for having
 equal sum of the first and second part for the current position of the middle `cut(j)`.
 
 Then, we go for the right cut and find the position of the right cut that leads to equal sum of the third and the fourth part
-(`sum[n-1]-sum[k]=sum[k-1] - sum[j]sum[n−1]−sum[k]=sum[k−1]−sum[j]`), for the same middle cut as chosen earlier. 
+(`sum[n-1]-sum[k]=sum[k-1] - sum[j]`), for the same middle cut as chosen earlier. 
 We also, look if the same sum exists in the setset. If so, such a triplet `(i, j, k)` exists which satisfies the required criteria, otherwise not.
 
 ### Python
