@@ -41,7 +41,6 @@ In this case, it is not possible to rotate the dominoes to make one row of value
 
 Solution
 ========
-![Solution]()
 ### Approach 1: Greedy.
 #### Intuition
 Let's pick up an arbitrary `i`-th domino element in the configuration. The element has two sides, `A[i]` is an upper side and `B[i]` is a lower side.
