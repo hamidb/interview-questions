@@ -62,23 +62,20 @@ class TimeMap:
             self.table[key] = ([value], [timestamp])
             return
         values, times = self.table[key]
-        index = bisect.bisect(times, timestamp)
-        values.insert(index, value)
-        times.insert(index, timestamp)
+        values.append(value)
+        times.append(timestamp)
+        # index = bisect.bisect(times, timestamp)
+        # values.insert(index, value)
+        # times.insert(index, timestamp)
 
     def get(self, key: str, timestamp: int) -> str:
         if key not in self.table:
             return ''
         values, times = self.table[key]
-        index = bisect.bisect_left(times, timestamp)
-        if index == len(times):
-            return values[index-1]
-        if times[index] == timestamp:
-            return values[index]
-        else:
-            if index == 0:
-                return ''
-            return values[index-1]
+        index = bisect.bisect(times, timestamp)
+        if index == 0:
+            return ''
+        return values[index-1]
         
 # Your TimeMap object will be instantiated and called as such:
 # obj = TimeMap()
