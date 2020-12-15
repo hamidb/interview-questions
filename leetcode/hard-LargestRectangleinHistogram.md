@@ -39,18 +39,52 @@ Further, if we reach the end of the array, we pop all the elements of the stack 
 `(stack[top]−stack[top−1])×height[stack[top]]`, where `stack[top]` refers to the element just popped. 
 Thus, we can get the area of the of the largest rectangle by comparing the new area found everytime.
 
+[![Explanation](https://img.youtube.com/vi/vcv3REtIvEo/0.jpg)](https://youtu.be/vcv3REtIvEo)
+
 ```python
 # O(N)
 class Solution:
+    # def largestRectangleArea(self, heights: List[int]) -> int:
+    #     stack = deque([-1])
+    #     length = len(heights)
+    #     max_area = 0
+    #     for i in range(length):
+    #         while stack[-1] != -1 and heights[stack[-1]] >= heights[i]:
+    #             max_area = max(max_area, heights[stack.pop()]*(i-stack[-1]-1))
+    #         stack.append(i)
+    #     while stack[-1] != -1:
+    #         max_area = max(max_area, heights[stack.pop()]*(length-stack[-1]-1))
+    #     return max_area
+    
     def largestRectangleArea(self, heights: List[int]) -> int:
-        stack = deque([-1])
         length = len(heights)
-        max_area = 0
+        left, right = length*[None], length*[None]
+        stack = deque([])
+
+        # fill left limit
         for i in range(length):
-            while stack[-1] != -1 and heights[stack[-1]] >= heights[i]:
-                max_area = max(max_area, heights[stack.pop()]*(i-stack[-1]-1))
+            while stack and heights[stack[-1]] >= heights[i]:
+                stack.pop()
+            if stack:
+                left[i] = stack[-1]+1
+            else:
+                left[i] = 0
             stack.append(i)
-        while stack[-1] != -1:
-            max_area = max(max_area, heights[stack.pop()]*(length-stack[-1]-1))
-        return max_area
+
+        stack = deque([])
+        
+        # fill right limit
+        for i in range(length-1, -1, -1):
+            while stack and heights[stack[-1]] >= heights[i]:
+                stack.pop()
+            if stack:
+                right[i] = stack[-1]-1
+            else:
+                right[i] = length-1
+            stack.append(i)
+
+        max_area = 0
+        for i in range(len(left)):
+            max_area = max(max_area, heights[i]*(right[i]-left[i]+1))
+        return max_area 
 ```
