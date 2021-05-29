@@ -84,3 +84,50 @@ class Solution:
         
         return len(top_sort) == len(values) and org == top_sort
 ```
+
+### **C++**
+```c++
+class Solution {
+public:
+    bool sequenceReconstruction(vector<int>& org, vector<vector<int>>& seqs) {
+        int n = org.size();
+        std::unordered_map<int, int> indegree;
+        std::unordered_map<int, vector<int>> graph;
+        set<int> values;
+        for (auto& seq: seqs) {
+           for (int i: seq) {
+               values.insert(i);
+           }
+        }
+        for (int i: values)
+            indegree[i] = 0;
+        for (auto& seq: seqs) {
+           for (int i=1; i < seq.size(); ++i) {
+               graph[seq[i-1]].push_back(seq[i]);
+               indegree[seq[i]]++;
+           } 
+        }
+        
+        queue<int> q;
+        for (auto& i: indegree) {
+            if (i.second == 0) {
+                q.push(i.first);
+            }
+        }
+        
+        vector<int> ts;
+        while (!q.empty()) {
+            if (q.size() != 1) return false;
+            int node = q.front(); q.pop();
+            ts.push_back(node);
+            for (auto child: graph[node]) {
+                if (--indegree[child] == 0) {
+                    q.push(child);
+                }
+            }
+        }
+        return (values.size() == ts.size() && org == ts);
+    }
+  
+};
+```
