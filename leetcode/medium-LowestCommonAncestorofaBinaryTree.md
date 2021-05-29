@@ -92,3 +92,53 @@ class Solution:
 #         return result[-1]
 
 ```
+
+### **C++**
+```c++
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        if (p==NULL || q==NULL)
+            return NULL;
+        unordered_map<TreeNode*, TreeNode*> parents = {{root, NULL}};
+        bfs(root, p, q, parents);
+        std::set<TreeNode*> p_anc;
+        while (p) {
+            p_anc.insert(p);
+            p = parents[p];
+        }
+        while (p_anc.find(q) == p_anc.end()) { // while q not found in p_anc
+            q = parents[q];
+        }
+        return q;
+    }
+    
+    void bfs(TreeNode* root, TreeNode* p, TreeNode* q, unordered_map<TreeNode*, TreeNode*>& parents) {
+        std::queue<TreeNode*> mq;
+        mq.push(root);
+        int found = 0;
+        while (!mq.empty() && found < 2) {
+            auto node = mq.front(); mq.pop();
+            if (node->val == q->val || node->val == p->val)
+                found++;
+            if (node->left) {
+                parents[node->left] = node;
+                mq.push(node->left);
+            }
+            if (node->right) {
+                parents[node->right] = node;
+                mq.push(node->right);
+            }
+        }
+    }
+};
+```
