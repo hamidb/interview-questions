@@ -60,3 +60,33 @@ class Solution:
 
         return area
 ```
+### **C++**
+```c++
+class Solution {
+public:
+    int maxAreaOfIsland(vector<vector<int>>& grid) {
+        int rows = grid.size();
+        if (rows == 0) return 0;
+        int cols = grid[0].size();
+        if (cols == 0) return 0;
+        int max_area = 0;
+        for (int r = 0; r < rows; ++r) {
+            for (int c = 0; c < cols; ++c) {
+                max_area = std::max(max_area, dfsArea(grid, r, c));
+            }
+        }
+        return max_area;
+    }
+    
+    int dfsArea(vector<vector<int>>& grid, int r, int c) {
+        if (r < 0 || c < 0 || r >= grid.size() || c >= grid[0].size() || grid[r][c] == 0)
+            return 0;
+        grid[r][c] = 0;
+        int area = 1 + dfsArea(grid, r+1, c);
+        area += dfsArea(grid, r-1, c);
+        area += dfsArea(grid, r, c+1);
+        area += dfsArea(grid, r, c-1);
+        return area;
+    }
+};
+```
