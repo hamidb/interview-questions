@@ -79,3 +79,60 @@ class Solution:
         self.fillParentMap(parent_map, root.right, root)
 
 ```
+### **C++**
+```c++
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<int> distanceK(TreeNode* root, TreeNode* target, int k) {
+        std::unordered_map<TreeNode*, TreeNode*> parents;
+        fillParents(root, parents, NULL);
+        
+        std::set<TreeNode*> seen = {target};
+        std::queue<TreeNode*> q;
+        q.push(target);
+        while (!q.empty() && k > 0) {
+            int size = q.size();
+            for (int i=0; i < size; ++i) {
+                auto node = q.front();
+                q.pop();
+                if (node->left && seen.count(node->left) <= 0) {
+                    q.push(node->left);
+                    seen.insert(node->left);
+                }
+                if (node->right && seen.count(node->right) <= 0) {
+                    q.push(node->right);
+                    seen.insert(node->right);
+                }
+                if (parents[node] && seen.count(parents[node]) <= 0) {
+                    q.push(parents[node]);
+                    seen.insert(parents[node]);
+                }
+            }
+            k--;
+        }
+        vector<int> result;
+        while (!q.empty()) {
+            result.push_back(q.front()->val); q.pop();
+        }
+        return result;
+        
+    }
+    
+    void fillParents(TreeNode* root, std::unordered_map<TreeNode*, TreeNode*> &parents, TreeNode* par) {
+        if (root == NULL)
+            return;
+        parents[root] = par;
+        fillParents(root->left, parents, root);
+        fillParents(root->right, parents, root);
+    }
+};
+```
