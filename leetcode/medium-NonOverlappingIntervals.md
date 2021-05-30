@@ -66,3 +66,22 @@ class Solution:
                 end = i[1]
         return remove
 ```
+### **C++**
+```c++
+class Solution {
+public:
+    int eraseOverlapIntervals(vector<vector<int>>& intervals) {
+        if (intervals.size() <= 1) return 0;
+        std::sort(intervals.begin(), intervals.end(), [](const vector<int>& v1, const vector<int>& v2){return v1[1] < v2[1];});
+        int remove = 0;
+        int end = intervals[0][0];
+        for (const auto &v: intervals) {
+            if (v[0] < end)
+                remove++;
+            else
+                end = v[1];
+        }
+        return remove;
+    }
+};
+```
