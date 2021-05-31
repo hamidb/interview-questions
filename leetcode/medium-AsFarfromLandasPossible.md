@@ -81,3 +81,50 @@ class Solution:
 
         return max_dist if max_dist > 0 else -1
 ```
+### **C++**
+```c++
+class Solution {
+public:
+    int maxDistance(vector<vector<int>>& grid) {
+        int rows = grid.size();
+        if (rows == 0) return -1;
+        int cols = grid[0].size();
+        if (cols == 0) return -1;
+        
+        vector<vector<int>> visited(rows, vector<int>(cols, 0));
+        std::deque<std::array<int, 3>> q;
+        for (int r = 0; r < rows; ++r) {
+            for (int c = 0; c < cols; ++c) {
+                if (grid[r][c] == 1){
+                    std::array<int, 3> a= {r, c, 0};
+                    q.push_back(a);
+                }
+            }
+        }
+
+        if (!q.size() || q.size() == rows*cols)
+            return -1;
+        int max_dist = -1;
+        int dr[4] = {0, 0, 1, -1};
+        int dc[4] = {1, -1, 0, 0};
+        while (!q.empty()){
+            auto a = q.front(); q.pop_front();
+            int r = a[0], c = a[1], dist = a[2];
+            max_dist = std::max(dist, max_dist);
+            visited[r][c] = 1;
+            for (int i = 0; i < 4; ++i) {
+                int rr = r + dr[i];
+                int cc = c + dc[i];
+                if (rr < 0 || rr >= rows || cc < 0 || cc >= cols || visited[rr][cc] || grid[rr][cc])
+                    continue;
+                visited[rr][cc] = 1;
+                std::array<int, 3> a = {rr, cc, dist+1};
+                q.push_back(a);
+            }
+        }
+        if (max_dist > 0)
+            return max_dist;
+        return -1;
+    }
+};
+```
