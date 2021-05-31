@@ -50,3 +50,21 @@ class Solution:
             idx += 1
         return -1        
 ```
+### **C++**
+```c++
+class Solution {
+public:
+    int pivotIndex(vector<int>& nums) {
+        int sum = 0;
+        for (const int v: nums)
+            sum += v;
+        int left = 0;
+        for (int i=0; i < nums.size(); ++i) {
+            if (left == sum - left - nums[i])
+                return i;
+            left += nums[i];
+        }
+        return -1;
+    }
+};
+```
