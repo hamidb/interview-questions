@@ -105,3 +105,62 @@ class Solution:
             if self.dfs(grid, i+1, j, 2, visited, lut): return True
         return False
 ```
+
+```python
+# simple BFS
+class Solution:
+    def hasValidPath(self, grid: List[List[int]]) -> bool:
+        m, n = len(grid), len(grid[0])
+        q = deque([[0, 0]])
+        while q:
+            r, c = q.popleft()
+            if r == m-1 and c == n-1:
+                return True
+            if grid[r][c] in [1, 3, 5] and c > 0 and grid[r][c-1] in [1, 4, 6]:
+                q.append([r, c-1])
+            if grid[r][c] in [1, 4, 6] and c < n-1 and grid[r][c+1] in [1, 3, 5]:
+                q.append([r, c+1])
+            if grid[r][c] in [2, 5, 6] and r > 0 and grid[r-1][c] in [2, 3, 4]:
+                q.append([r-1, c])
+            if grid[r][c] in [2, 3, 4] and r < m-1 and grid[r+1][c] in [2, 5, 6]:
+                q.append([r+1, c])
+            grid[r][c] = 0  # visited
+        return False
+```
+
+### **C++**
+```c++
+class Solution {
+public:
+    bool hasValidPath(vector<vector<int>>& grid) {
+        int m = grid.size(), n = grid[0].size();
+        std::deque<std::vector<int>> q;
+        q.push_back({0, 0});
+        while (!q.empty()) {
+            const auto elem = q.front(); q.pop_front();
+            int r = elem[0], c = elem[1];
+            if (r == m-1 && c == n-1)
+                return true;
+            if (isIn(grid[r][c], {1, 3, 5}) && c > 0 && isIn(grid[r][c-1], {1, 4, 6}))
+                q.push_back({r, c-1});
+            if (isIn(grid[r][c], {1, 4, 6}) && c < n-1 && isIn(grid[r][c+1], {1, 3, 5}))
+                q.push_back({r, c+1});
+            if (isIn(grid[r][c], {2, 5, 6}) && r > 0 && isIn(grid[r-1][c], {2, 3, 4}))
+                q.push_back({r-1, c});
+            if (isIn(grid[r][c], {2, 3, 4}) && r < m-1 && isIn(grid[r+1][c], {2, 5, 6}))
+                q.push_back({r+1, c});
+            grid[r][c] = 0;
+        }
+        return false;
+    }
+    
+    bool isIn(int value, const vector<int>& target) {
+        for (const auto& v : target) {
+            if (value == v)
+                return true;
+        }
+        return false;
+    }
+};
+
+```
