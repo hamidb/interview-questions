@@ -34,6 +34,55 @@ You may assume that there are no duplicate edges in the input prerequisites.
 
 Solution
 ========
+using "In degree".
+
+```python
+class Solution:
+    def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
+        if numCourses == 0:
+            return []
+        graph = {k: [] for k in range(numCourses)}
+        for pair in prerequisites:
+            graph[pair[0]].append(pair[1])
+        if self.isCyclic(graph):
+            return []
+        
+        in_degree = numCourses * [0]
+        for node in range(numCourses):
+            for k in graph[node]:
+                in_degree[k] += 1
+        q = deque([i for i in range(numCourses) if in_degree[i] == 0])
+        
+        order = []
+        while q:
+            node = q.popleft()
+            order.insert(0, node)
+            for child in graph[node]:
+                in_degree[child] -= 1
+                if in_degree[child] == 0:
+                    q.append(child)
+        return order
+    
+    def isCyclic(self, graph):
+        def dfs(graph, node, visiting, visited):
+            visiting.add(node)
+            for v in (graph.get(node) or []):
+                if v in visiting:
+                    return True
+                if v in visited:
+                    continue
+                if dfs(graph, v, visiting, visited):
+                    return True
+            visiting.remove(node)
+            visited.add(node)
+            return False
+        visited = set()
+        visiting = set()
+        for node, _ in (graph.items() or {}):
+            if dfs(graph, node, visiting, visited):
+                return True
+        return False
+```
 ```python
 class Solution:
     def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
