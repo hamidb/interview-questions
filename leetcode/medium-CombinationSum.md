@@ -36,6 +36,11 @@ Solution
 ========
 ![Explanation](images/image0008.png)
 
+Let `N` be the number of candidates, `T` be the target value, and `M` be the minimal value among the candidates:
+
+* Time complexity is O(N^(T/M + 1))
+* Space complexity is O(T/M)
+
 ```python
 class Solution:
     def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
@@ -57,5 +62,34 @@ class Solution:
             result.append(candidates[i])
             self.dfs(candidates, target-candidates[i], result, results, i)
             result.pop(len(result)-1)  # remove last element and backtrack
-
+```
+### **C++**
+```c++
+class Solution {
+public:
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
+        vector<vector<int>> results;
+        vector<int> result;
+        if (candidates.size() == 0)
+            return results;
+        std::sort(candidates.begin(), candidates.end());    
+        dfs(candidates, target, result, results, 0);
+        return results;
+    }
+    
+    void dfs(vector<int>& candidates, int target, vector<int>& result, vector<vector<int>>& results, int start) {
+        if (target == 0) {
+            results.push_back(result);
+            return;
+        }
+        
+        for (int i=start; i < candidates.size(); ++i) {
+            if (target < candidates[i])
+                return;
+            result.push_back(candidates[i]);
+            dfs(candidates, target-candidates[i], result, results, i);
+            result.pop_back();
+        }       
+    }
+};
 ```
