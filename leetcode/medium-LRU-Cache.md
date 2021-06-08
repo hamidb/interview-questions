@@ -119,3 +119,124 @@ class LRUCache:
 # param_1 = obj.get(key)
 # obj.put(key,value)
 ```
+
+### **C++**
+```c++
+class Node {
+public:
+    Node(int key, int data, Node* prev=NULL, Node* next=NULL) {
+        _key = key;
+        _data = data;
+        _prev = prev;
+        _next = next;
+    }
+    int _data;
+    int _key;
+    Node* _next;
+    Node* _prev;
+};
+class LRUCache {
+public:
+    LRUCache(int capacity) {
+        _capacity = capacity;
+        _size = 0;
+        _head = NULL;
+        _tail = NULL;
+    }
+    
+    int get(int key) {
+        if (_table.count(key) == 0) {
+            return -1;
+        }
+        auto node = _remove(_table[key]);
+        _preppend(key, node->_data);
+        return node->_data;
+    }
+    
+    void put(int key, int value) {
+        if (_table.count(key) != 0) {
+            auto node = _remove(_table[key]);
+            delete node;
+            _preppend(key, value);
+        } else {
+            if (_size < _capacity) {
+                _preppend(key, value);
+            } else {
+                auto node = _popLast();
+                _table.erase(node->_key);
+                delete node;
+                _preppend(key, value);
+            }
+        }
+        
+    }
+    
+    bool _empty() {
+        return (_size == 0);
+    }
+    
+    Node* _popFirst() {
+        Node* node = _head;
+        _head = node->_next;
+        _size--;
+        if (_empty()) {
+            _tail = NULL;    
+        } else {
+            _head->_prev = NULL;
+        }
+        return node;
+    }
+    
+    Node* _popLast() {
+        Node* node = _tail;
+        _tail = node->_prev;
+        _size--;
+        if (_empty()) {
+            _head = NULL;
+        } else {
+            _tail->_next = NULL;   
+        }
+        return node;
+    }
+    
+    void _preppend(int key, int value) {
+        if (_empty()) {
+            Node* node = new Node(key, value);
+            _head = node;
+            _tail = node;
+        } else {
+            Node* node = new Node(key, value, NULL, _head);
+            _head->_prev = node;
+            _head = node;
+        }
+        _table[key] = _head;
+        _size++;
+    }
+    
+    Node* _remove(Node* node) {
+        if (node->_prev == NULL) {
+            return _popFirst();
+        }
+        if (node->_next == NULL) {
+            return _popLast();
+        }
+        node->_prev->_next = node->_next;
+        node->_next->_prev = node->_prev;
+        _size--;
+        return node;
+    }
+    
+    std::unordered_map<int, Node*> _table;
+    int _capacity;
+    int _size;
+    Node* _head;
+    Node* _tail;
+};
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache* obj = new LRUCache(capacity);
+ * int param_1 = obj->get(key);
+ * obj->put(key,value);
+ */
+```
