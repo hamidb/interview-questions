@@ -53,35 +53,20 @@ class Solution:
 #             count += self.dfs(grid, r+1, c, rows, cols)
 #         return count
     
-    # Bottom up
+# Bottom up
+class Solution:
     def uniquePathsWithObstacles(self, obstacleGrid: List[List[int]]) -> int:
-        # if either of finish or end point has obstacle
+        rows = len(obstacleGrid)
+        cols = len(obstacleGrid[0]) if rows else 0
         if obstacleGrid[0][0] == 1 or obstacleGrid[-1][-1] == 1:
             return 0
-        
-        rows = len(obstacleGrid)
-        cols = len(obstacleGrid[0]) if rows != 0 else 0
-        
-        grid = [[0 for i in range(cols+1)] for j in range(rows+1)]
+        grid = [(cols+1)*[0] for _ in range(rows+1)]
         grid[1][1] = 1
-        r = 1
-        while r < rows+1:
-            c = 1
-            while c < cols+1:
-                if r == 1 and c == 1:
-                    c += 1
+        for r in range(1, rows+1):
+            for c in range(1, cols+1):
+                if (r == 1 and c == 1) or obstacleGrid[r-1][c-1] == 1:
                     continue
-                grid[r][c] = (self.getValue(obstacleGrid, grid, r-1, c) +
-                              self.getValue(obstacleGrid, grid, r, c-1))
-                c += 1
-            r += 1
+                grid[r][c] = grid[r][c-1] + grid[r-1][c]
         return grid[-1][-1]
-        
-    def getValue(self, obstacles, grid, r, c):
-        if r-1 < 0 or c-1 < 0:
-            return grid[r][c]
-        if obstacles[r-1][c-1] == 1:
-            return 0
-        return grid[r][c]
         
 ```
