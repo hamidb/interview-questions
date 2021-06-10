@@ -35,7 +35,7 @@ Solution
 
 ```python
 class Solution:
-# O(n^2) (Memoization)
+# O(n^3) (Memoization)
 #     def wordBreak(self, s: str, wordDict: List[str]) -> bool:
 #         seen = {}
 #         return self._wordBreak(s, wordDict, seen)
@@ -52,7 +52,7 @@ class Solution:
 #         seen[s] = False
 #         return False
 
-# O(n^2) (DP bottom up)
+# O(n^3) (DP bottom up)
     def wordBreak(self, s: str, wordDict: List[str]) -> bool:
         if s in wordDict:
             return True
@@ -67,4 +67,68 @@ class Solution:
                     wb[i] = True
                     break
         return wb[-1]
+
+# O(N^2) (Samle as above using dictionary)
+class Solution:
+    def wordBreak(self, s: str, wordDict: List[str]) -> bool:
+        seen = {}
+        table = set()
+        for w in wordDict:
+            table.add(w)
+        return self._wordBreak(s, wordDict, seen, table)
+        
+    def _wordBreak(self, s, wordDict, seen, table):
+        if s in table:
+            return True
+        if s in seen:
+            return seen[s]
+        for i in range(len(s)):
+            if s[0:i+1] in table and self._wordBreak(s[i+1:], wordDict, seen, table):
+                seen[s] = True
+                return True
+        seen[s] = False
+        return False
+        
+        class TrieNode:
+    def __init__(self):
+        self.children = {}
+        self.isWord = False
+        
+# O(N*L) (Samle as above using Trie)
+class Solution:
+    def __init__(self):
+        self.root = TrieNode()
+        
+    def wordBreak(self, s: str, wordDict: List[str]) -> bool:
+        for w in wordDict:
+            self.add(w)
+        seen = {}
+        return self._wordBreak(s, seen)
+        
+    def _wordBreak(self, s, seen):
+        if s == "":
+            return True
+        if s in seen:
+            return seen[s]
+        p = self.root
+        for i in range(len(s)):
+            if s[i] not in p.children:
+                seen[s] = False
+                return False
+            p = p.children[s[i]]
+            if p.isWord and self._wordBreak(s[i+1:], seen):
+                seen[s] = True
+                return True
+        seen[s] = False
+        return False
+            
+        
+    def add(self, word):
+        p = self.root
+        for c in word:
+            if c not in p.children:
+                p.children[c] = TrieNode()
+            p = p.children[c]
+        p.isWord = True
+        
 ```
