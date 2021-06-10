@@ -46,3 +46,30 @@ class Solution:
                 seen[tc] = 1
         return True
 ```
+
+### **C++**
+```c++
+class Solution {
+public:
+    bool isIsomorphic(string s, string t) {
+        int L = s.size();
+        std::unordered_map<char, char> table;
+        std::set<char> seen;
+        if (L == 0)
+            return (t.size() == L);
+        for (int i=0; i < L; ++i) {
+            int si = s[i], ti = t[i];
+            if (table.count(si) != 0) {
+                if (table[si] != ti)
+                    return false;
+            } else {
+                if (seen.count(ti) == 1)
+                    return false;
+                table[si] = ti;
+                seen.insert(ti);
+            }
+        }
+        return true;
+    }
+};
+```
