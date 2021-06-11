@@ -49,42 +49,23 @@ Solution
 
 class Solution:
     def findSecretWord(self, wordlist: List[str], master: 'Master') -> None:
-        for _ in range(10):
-            w = wordlist[randrange(len(wordlist))]
-            match_cnt = master.guess(w)
-            if match_cnt == 6: 
-                return
-            if match_cnt == 0:
-                wordlist = self.remove_a(wordlist, w)
-            else:
-                wordlist = self.remove_b(wordlist, w)
                 
-    def remove_a(self, wordlist, word):
-        # word had 0 match. So remove any word in the list
-        # with at least one match with word
-        new_list = []
-        for w in wordlist:
-            match = False
-            for i in range(6):
-                if w[i] == word[i]:
-                    match = True
-                    break
-            if not match:
-                new_list.append(w)
-        return new_list
-    
-    def remove_b(self, wordlist, word):
-        # word had at least one match. So remove any word in
-        # the list with zero match with word
-        new_list = []
-        for w in wordlist:
-            match = False
-            for i in range(6):
-                if w[i] == word[i]:
-                    match = True
-                    break
-            if match:
-                new_list.append(w)
-        return new_list
+        def remove_a(wordlist, s, v):
+            words = []
+            for j, w in enumerate(wordlist):
+                if w == s:
+                    continue
+                if v == sum([1 for i in range(6) if w[i] == s[i]]):
+                    words.append(w)
+            return words
+        
+        v = 0
+        while 1:
+            word = wordlist[random.randint(0, len(wordlist)-1)]
+            v = master.guess(word)
+            if v == 6:
+                return
+            else:
+                wordlist = remove_a(wordlist, word, v)
 ```
 
