@@ -58,6 +58,15 @@ class Solution:
                 if v == sum([1 for i in range(6) if w[i] == s[i]]):
                     words.append(w)
             return words
+                        
+        def remove_b(wordlist, s):
+            words = []
+            for j, w in enumerate(wordlist):
+                if w == s:
+                    continue
+                if 0 == sum([1 for i in range(6) if w[i] == s[i]]):
+                    words.append(w)
+            return words
         
         v = 0
         while 1:
@@ -65,7 +74,10 @@ class Solution:
             v = master.guess(word)
             if v == 6:
                 return
+            elif v == 0:
+                wordlist = remove_b(wordlist, word)
             else:
                 wordlist = remove_a(wordlist, word, v)
+
 ```
 
