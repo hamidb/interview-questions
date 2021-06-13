@@ -35,8 +35,8 @@ Solution
 ========
 
 ```python
-# T: O(n)
-# S: O(kn)
+# T: O(kn)
+# S: O(n)
 class Solution:
     def decodeString(self, s: str) -> str:
         result = ''
