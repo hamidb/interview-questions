@@ -49,6 +49,21 @@ class Solution:
 #         nums.append(v)
 #         return False
     
+    # recursive + memo (top down)
+    def canPartition(self, nums: List[int]) -> bool:
+        d, rem = divmod(sum(nums), 2)
+        if rem: return False
+        return self.search(tuple(nums), 0, d)
+    
+    @lru_cache(maxsize=None)
+    def search(self, nums, i, d):
+        if d == 0:
+            return True
+        if i == len(nums) or d < 0:
+            return False
+        result = self.search(nums, i+1, d-nums[i]) or self.search(nums, i+1, d) 
+        return result
+        
     # Dynamic programming since nums are non-negative.
     def canPartition(self, nums: List[int]) -> bool:
         d, rem = divmod(sum(nums), 2)
