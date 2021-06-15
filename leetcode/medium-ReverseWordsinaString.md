@@ -57,5 +57,37 @@ class Solution:
         tmp = s.split()
         return ' '.join(tmp[::-1])
         
+```
 
+### **C++**
+In place solution
+```c++
+class Solution {
+public:
+    string reverseWords(string s) {
+        // reverse the whole string
+        reverse(s.begin(), s.end());
+        int n = s.size();
+        int id = 0;
+        int start = 0;
+        for (int start=0; start < n; ++start) {
+            // find the first non space char
+            if (s[start] == ' ') continue;
+            // id keeps track of delimiter
+            if (id !=0 ) s[id++] = ' ';
+            int j = start;  // from start to the next space
+            while (j < n && s[j] != ' ')
+                s[id++] = s[j++];
+            // reverse the word
+            // j: end index of last word
+            // j - start: length of the last word
+            // id: start of the last word
+            reverse(s.begin()+id-(j-start), s.begin()+id);
+            start = j; // go to the next word
+        }
+        // remove extra non-used elements
+        s.erase(s.begin()+id, s.end());
+        return s;
+    }
+};
 ```
