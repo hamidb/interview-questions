@@ -37,6 +37,28 @@ Solution
 ========
 
 ```python
+# Greedy 
+# T: O(N) 
+# S: O(N)
+# N: length of popped and pushed.
+
+class Solution:
+    def validateStackSequences(self, pushed: List[int], popped: List[int]) -> bool:
+        if len(popped) == 0:
+            return True
+        if len(popped) > len(pushed):
+            return False
+        
+        pop_i = 0
+        stack = []
+        for p in pushed:
+            stack.append(p)
+            while stack and pop_i < len(popped) and popped[pop_i] == stack[-1]:
+                stack.pop()
+                pop_i += 1        
+        return pop_i == len(popped)
+
+
 class Solution:
     def validateStackSequences(self, pushed: List[int], popped: List[int]) -> bool:
         pop_size = len(popped)
