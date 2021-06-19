@@ -1,5 +1,43 @@
 """Topological sort for a DAG"""
 
+def topsort_kahn(graph):    
+    # Create a vector to store indegrees of all
+    # vertices. Initialize all indegrees as 0.
+    # V = all nodes     
+    in_degree = [0]*(V)
+
+    # Traverse adjacency lists to fill indegrees of
+       # vertices.  This step takes O(V + E) time
+    for i in graph:
+        for j in graph[i]:
+            in_degree[j] += 1
+
+    # Create an queue and enqueue all vertices with
+    # indegree 0
+    # queue = [i for i in range(V) if in_degree[i] == 0]
+    for i in range(V):
+        if in_degree[i] == 0:
+            queue.append(i)
+
+    # Initialize count of visited vertices
+    cnt = 0
+    top_order = []
+    while queue:
+        u = queue.pop(0)
+        top_order.append(u)
+        # Iterate through all neighbouring nodes
+        # of dequeued node u and decrease their in-degree by 1
+        for i in self.graph[u]:
+            in_degree[i] -= 1
+            if in_degree[i] == 0:
+                queue.append(i)
+        cnt += 1
+    # Check if there was a cycle
+    if cnt != self.V:
+        return []
+    else :
+        return top_order
+          
 class Edge:
 
   def __init__(self, origin, to, w):
