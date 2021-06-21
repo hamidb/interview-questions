@@ -1,8 +1,8 @@
-1 Billion Users
+Rotational Cipher
 ===============================
 ### Medium
 
-Rotational Cipher
+
 One simple way to encrypt a string is to "rotate" every alphanumeric character by a certain amount.
 Rotating a character means replacing it with another character that is a certain number of steps away in normal alphabetic or numerical order.
 For example, if the string `"Zebra-493?"` is rotated 3 places, the resulting string is `"Cheud-726?"`.
