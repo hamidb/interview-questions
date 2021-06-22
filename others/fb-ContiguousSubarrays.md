@@ -1,6 +1,6 @@
 Contiguous Subarrays
 ===============================
-### Medium
+### Facebook
 
 You are given an array arr of `N` integers. For each index `i`, you are required to determine the number of contiguous subarrays that fulfill the following conditions:
 
