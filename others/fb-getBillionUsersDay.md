@@ -1,6 +1,6 @@
 1 Billion Users
 ===============================
-### Medium
+### Facebook
 
 We have `N` different apps with different user growth rates. At a given time t, measured in days, the number of users using an app is `g^t`
 (for simplicity we'll allow fractional users), where `g` is the growth rate for that app.
