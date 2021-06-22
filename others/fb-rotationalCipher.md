@@ -1,6 +1,6 @@
 Rotational Cipher
 ===============================
-### Medium
+### Facebook
 
 
 One simple way to encrypt a string is to "rotate" every alphanumeric character by a certain amount.
