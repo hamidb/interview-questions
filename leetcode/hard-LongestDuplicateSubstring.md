@@ -77,4 +77,43 @@ class Solution:
                 right = mid - 1
         return ans
 
+# # T: O(NlogN)
+# # S: O(N)
+# # Binary search + Rabin-Karp 
+class Solution:
+    def longestDupSubstring(self, s: str) -> str:
+
+        def check_rabin_karp(l):
+            base, mod = 256, 10**9+7
+            h, P = 0, base**(l-1)%mod
+
+            for i in range(l):
+                h = (h * base + ord(s[i])) % mod
+
+            seen = defaultdict(list)
+            seen[h] = [0]
+
+            for i in range(len(s)-l):
+                ss = s[i+1:i+l+1]
+                h = ((h - ord(s[i])*P)*base + ord(s[i+l])) % mod
+                if h < 0: h += mod
+                for j in seen[h]:
+                    if s[j:j+l] == ss:
+                        return ss
+                seen[h].append(i+1)
+
+            return None
+        
+        ans, lo, hi = "", 0, len(s)
+        while lo < hi:
+            mid = (lo+hi)//2
+            duplicate = check_rabin_karp(mid)
+            
+            if duplicate:
+                lo = mid+1
+                ans = duplicate
+            else:
+                hi = mid
+                
+        return ans
 ```
