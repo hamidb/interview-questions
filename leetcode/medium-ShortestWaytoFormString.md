@@ -39,28 +39,53 @@ The lengths of source and target string are between 1 and 1000.
 Solution
 ========
 ```python
-class Solution:
+# T: O(MxN)
+# S: O(1)
+#class Solution:
+#    def shortestWay(self, source: str, target: str) -> int:
+#        if len(target) == 0:
+#            return 0
+#        idx = source.find(target[0])
+#        if idx == -1: 
+#            return -1
+#        
+#        s = idx + 1  # continue searchin starting from 's'
+#        t = 1  # go to the second target character
+#        while s < len(source) and t < len(target):
+#            idx = source.find(target[t], s)
+#            if idx == -1:  # if not found, break and try the remaining characters.
+#                break
+#            t += 1  # otherwise, increment the length of subsequence by 1
+#            s = idx+1  # and search starting from the next source character
+#        
+#        # we are out of the loop. meaning we either couldn't find,
+#        # or reached the end of target.
+#        # So repeat the process with target[t:end] (t = length of biggest subsequence)
+#        remaining = self.shortestWay(source, target[t:])
+#        if remaining == -1:
+#            return remaining
+#        return remaining+1
+        
+# T: O(log(M)xN)
+# S: O(N)        
     def shortestWay(self, source: str, target: str) -> int:
-        if len(target) == 0:
-            return 0
-        idx = source.find(target[0])
-        if idx == -1: 
-            return -1
-        
-        s = idx + 1  # continue searchin starting from 's'
-        t = 1  # go to the second target character
-        while s < len(source) and t < len(target):
-            idx = source.find(target[t], s)
-            if idx == -1:  # if not found, break and try the remaining characters.
-                break
-            t += 1  # otherwise, increment the length of subsequence by 1
-            s = idx+1  # and search starting from the next source character
-        
-        # we are out of the loop. meaning we either couldn't find,
-        # or reached the end of target.
-        # So repeat the process with target[t:end] (t = length of biggest subsequence)
-        remaining = self.shortestWay(source, target[t:])
-        if remaining == -1:
-            return remaining
-        return remaining+1
+        #2 pointer solution
+        dic = collections.defaultdict(list)
+        for i, c in enumerate(source):
+            dic[c].append(i)
+        ans =1
+        j=0
+        i=-1
+        while j<len(target):
+            c= target[j]
+            if c not in dic: return -1
+            pos = bisect.bisect_right(dic[c], i)
+            if pos >= len(dic[c]):
+                i= -1
+                ans+=1
+                continue
+            else: 
+                i = dic[c][pos]
+                j+=1
+        return ans
 ```
