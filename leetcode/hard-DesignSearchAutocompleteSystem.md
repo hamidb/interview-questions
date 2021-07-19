@@ -75,11 +75,17 @@ Solution
 `AutocompleteSystem()` takes **O(k * l)** time.
 We need to iterate over **l** sentences each of average length **k**, to create the trie for the given set of sentencessentences.
 
-`input()` takes **O(p + q + m * log(m))** time. Here, **p** refers to the length of the sentence formed till now. **q** refers to the number of nodes in the trie
+`input()` takes **O(q + m * log(3))** time. **q** refers to the number of nodes in the trie
 considering the sentence formed till now as the root node.
-Again, we need to sort the list of length m indicating the options available for the hot sentences, which takes **O(m * log(m))** time.
+Again, we need to heap.push the list of length m indicating the options available for the hot sentences, which takes **O(m * log(3))** time.
 
 ```python
+class TrieNode:
+    def __init__(self):
+        self.rank = 0
+        self.children = {}
+        self.isEnd = False
+        
 class TrieNode:
     def __init__(self):
         self.rank = 0
@@ -89,8 +95,9 @@ class TrieNode:
 class AutocompleteSystem:
         
     def __init__(self, sentences: List[str], times: List[int]):
-        self.search_word = ''
         self.root = TrieNode()
+        self.search_word = ''
+        self.curr = self.root
         for sentence, rank in zip(sentences, times):
             self.add(sentence, rank)
     
@@ -108,20 +115,13 @@ class AutocompleteSystem:
     def search(self, word):
         if word == '':
             return []
-        p = self.root
-        prefix = ''
         results = []
-        for c in word:
-            if c not in p.children:
-                return results
-            p = p.children[c]
-            prefix += c
-        self.dfs(p, prefix, results)
-        return list(zip(*sorted(results)[:3]))[1]
+        self.dfs(self.curr, word, results)
+        return [heapq.heappop(results)[1] for _ in range(min(3, len(results)))]
         
     def dfs(self, root, prefix, results):
         if root.isEnd:
-            results.append((root.rank, prefix))
+            heapq.heappush(results, (root.rank, prefix))
         for c in root.children:
             self.dfs(root.children[c], prefix+c, results)
         
@@ -129,12 +129,90 @@ class AutocompleteSystem:
         if c == '#' and self.search_word:
             self.add(self.search_word, 1)
             self.search_word = ''
+            self.curr = self.root  # reset
         else:
             self.search_word += c
+            self.curr = self.curr.children.get(c, TrieNode())
+            
         return self.search(self.search_word)
 
 # Your AutocompleteSystem object will be instantiated and called as such:
 # obj = AutocompleteSystem(sentences, times)
 # param_1 = obj.input(c)
 
+```
+
+### Same + Priority Queue
+```python
+class TrieNode:
+    def __init__(self):
+        self.rank = 0
+        self.children = {}
+        self.isEnd = False
+
+class Word:
+    def __init__(self, rank, word):
+        self.word = word
+        self.rank = rank
+    def __eq__(self, other):
+        if self.rank == other.rank:
+            return self.word == other.word
+    def __gt__(self, other):
+        if self.rank == other.rank:
+            return self.word < other.word
+        return self.rank > other.rank
+    def __lt__(self, other):
+        if self.rank == other.rank:
+            return self.word > other.word
+        return self.rank < other.rank
+
+class AutocompleteSystem:
+        
+    def __init__(self, sentences: List[str], times: List[int]):
+        self.root = TrieNode()
+        self.search_word = ''
+        self.curr = self.root
+        for sentence, rank in zip(sentences, times):
+            self.add(sentence, rank)
+    
+    def add(self, sentence, rank):
+        if sentence is None:
+            return
+        p = self.root
+        for c in sentence:
+            if c not in p.children:
+                p.children[c] = TrieNode()
+            p = p.children[c]
+        p.isEnd = True
+        p.rank += rank
+        
+    def search(self, word):
+        if word == '':
+            return []
+        q = []
+        self.dfs(self.curr, word, q)
+        return [heapq.heappop(q).word for _ in range(len(q))][::-1]
+            
+    def dfs(self, root, prefix, q):
+        if root.isEnd:
+            heapq.heappush(q, Word(root.rank, prefix))
+            if len(q) > 3:
+                heapq.heappop(q)
+        for c in root.children:
+            self.dfs(root.children[c], prefix+c, q)
+        
+    def input(self, c: str) -> List[str]:
+        if c == '#' and self.search_word:
+            self.add(self.search_word, 1)
+            self.search_word = ''
+            self.curr = self.root  # reset
+        else:
+            self.search_word += c
+            self.curr = self.curr.children.get(c, TrieNode())
+            
+        return self.search(self.search_word)
+
+# Your AutocompleteSystem object will be instantiated and called as such:
+# obj = AutocompleteSystem(sentences, times)
+# param_1 = obj.input(c)
 ```
