@@ -44,17 +44,22 @@ Thus, we can get the area of the of the largest rectangle by comparing the new a
 ```python
 # O(N)
 class Solution:
-    # def largestRectangleArea(self, heights: List[int]) -> int:
-    #     stack = deque([-1])
-    #     length = len(heights)
-    #     max_area = 0
-    #     for i in range(length):
-    #         while stack[-1] != -1 and heights[stack[-1]] >= heights[i]:
-    #             max_area = max(max_area, heights[stack.pop()]*(i-stack[-1]-1))
-    #         stack.append(i)
-    #     while stack[-1] != -1:
-    #         max_area = max(max_area, heights[stack.pop()]*(length-stack[-1]-1))
-    #     return max_area
+    # Maintain a monotonic increasing stack.
+    # Every time we pop an element, we compute area by finding left and right limits.
+    # left limit is simply the element on the top of stack.
+    # the right limit is the current index we are iterating.
+    # area = (i - stack[-1] - 1) * height of popped element. 
+    def largestRectangleArea(self, heights: List[int]) -> int:
+        stack = deque([-1])
+        length = len(heights)
+        max_area = 0
+        for i in range(length):
+            while stack[-1] != -1 and heights[stack[-1]] >= heights[i]:
+                max_area = max(max_area, heights[stack.pop()]*(i-stack[-1]-1))
+            stack.append(i)
+        while stack[-1] != -1:
+            max_area = max(max_area, heights[stack.pop()]*(length-stack[-1]-1))
+        return max_area
     
     def largestRectangleArea(self, heights: List[int]) -> int:
         length = len(heights)
@@ -87,4 +92,26 @@ class Solution:
         for i in range(len(left)):
             max_area = max(max_area, heights[i]*(right[i]-left[i]+1))
         return max_area 
+```
+
+### Divide and conquer
+```python
+# T: O(n log n)
+class Solution:
+    def largestRectangleArea(self, heights: List[int]) -> int:
+        def calculateArea(heights: List[int], start: int, end: int) -> int:
+            if start > end:
+                return 0
+            min_index = start
+            for i in range(start, end + 1):
+                if heights[min_index] > heights[i]:
+                    min_index = i
+            return max(
+                heights[min_index] * (end - start + 1),
+                calculateArea(heights, start, min_index - 1),
+                calculateArea(heights, min_index + 1, end),
+            )
+
+        return calculateArea(heights, 0, len(heights) - 1)
+
 ```
