@@ -1,6 +1,6 @@
 Encode String with Shortest Length (Leetcode #471)
 ===============================
-### Medium
+### Hard
 
 Given a non-empty string, encode the string such that its encoded length is the shortest.
 
@@ -83,6 +83,7 @@ class Solution:
         
         # index of second occurance of the repeated pattern. And its frequency. 
         i = (s+s).find(s, 1)
+        # if i N n then it means s is a repeating pattern.
         dp[s] = s
         if i < n:
             compress = str(n // i) + '[' + self._encode(s[:i], dp) + ']'
