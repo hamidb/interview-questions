@@ -51,6 +51,13 @@ class RingIterator {
     using reference = T&;
     using iterator = RingIterator<T, N>;
     // _rb(rb) will avoid copying.
+    // If the definition of a class X does not explicitly declare a move constructor,
+    // one will be implicitly declared as defaulted if and only if
+    // X does not have a user-declared copy constructor,
+    // X does not have a user-declared copy assignment operator,
+    // X does not have a user-declared move assignment operator,
+    // X does not have a user-declared destructor, and
+    // the move constructor would not be implicitly defined as deleted.
     RingIterator(RingBuffer<T, N> &rb, int off): _rb(rb), _off(off) {}
 
     iterator& operator++() {  // prefix ++
