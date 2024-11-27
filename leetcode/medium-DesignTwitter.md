@@ -42,6 +42,54 @@ At most 3 * 104 calls will be made to postTweet, getNewsFeed, follow, and unfoll
 
 Solution
 ========
+```python
+from collections import defaultdict
+import heapq
+
+class Twitter:
+
+    def __init__(self):
+        # Initialize the necessary data structures
+        self.time = 0  # to keep track of the order of tweets
+        self.users = defaultdict(lambda: {"tweets": [], "following": set()})
+        
+    def postTweet(self, userId: int, tweetId: int) -> None:
+        """Post a new tweet by the user"""
+        self.time += 1  # Increment the timestamp for each new tweet
+        self.users[userId]["tweets"].append((self.time, tweetId))
+        
+    def getNewsFeed(self, userId: int) -> list[int]:
+        """Retrieve the 10 most recent tweets from the user's feed"""
+        # A min heap to maintain the most recent 10 tweets
+        min_heap = []
+        
+        # Get tweets from the user itself
+        for tweet in self.users[userId]["tweets"]:
+            heapq.heappush(min_heap, tweet)
+            if len(min_heap) > 10:
+                heapq.heappop(min_heap)
+        
+        # Get tweets from the users the user follows
+        for followeeId in self.users[userId]["following"]:
+            for tweet in self.users[followeeId]["tweets"]:
+                heapq.heappush(min_heap, tweet)
+                if len(min_heap) > 10:
+                    heapq.heappop(min_heap)
+        
+        # Sort tweets by time in descending order and return the tweet IDs
+        result = [tweetId for _, tweetId in sorted(min_heap, reverse=True)]
+        return result
+    
+    def follow(self, followerId: int, followeeId: int) -> None:
+        """Make followerId follow followeeId"""
+        if followerId != followeeId:  # a user can't follow themselves
+            self.users[followerId]["following"].add(followeeId)
+        
+    def unfollow(self, followerId: int, followeeId: int) -> None:
+        """Make followerId unfollow followeeId"""
+        if followeeId in self.users[followerId]["following"]:
+            self.users[followerId]["following"].remove(followeeId)
+```
 
 ```python
 class Twitter:
