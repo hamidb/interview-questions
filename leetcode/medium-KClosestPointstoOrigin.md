@@ -47,9 +47,8 @@ class Solution:
             if len(pq) < k:
                 heapq.heappush(pq, (-x*x - y*y, i))
             else:
-                dist = x*x + y*y
-                if dist < -pq[0][0]:  # if current is smaller than the biggest in pq
-                    heapq.heappushpop(pq, (-dist, i))
+                dist = x*x + y*y                
+                heapq.heappushpop(pq, (-dist, i))
             i += 1
         return [points[i] for _, i in pq]
                     
