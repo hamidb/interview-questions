@@ -32,6 +32,61 @@ Solution
 ========
 [![LRU Cache explanation](https://img.youtube.com/vi/S6IfqDXWa10/0.jpg)](https://www.youtube.com/watch?v=S6IfqDXWa10)
 
+
+```python
+simpler version
+class Node:
+    def __init__(self, key: int, value: int):
+        self.key = key
+        self.value = value
+        self.prev = None
+        self.next = None
+
+class LRUCache:
+    def __init__(self, capacity: int):
+        self.capacity = capacity
+        self.cache = {}  # Hash map: key -> node
+        # Dummy head and tail to simplify adding/removing nodes
+        self.head = Node(0, 0)
+        self.tail = Node(0, 0)
+        self.head.next = self.tail
+        self.tail.prev = self.head
+
+    def _remove(self, node: Node):
+        """Remove a node from the doubly linked list."""
+        prev, next = node.prev, node.next
+        prev.next = next
+        next.prev = prev
+
+    def _add(self, node: Node):
+        """Add a node to the end of the doubly linked list (most recently used)."""
+        prev, next = self.tail.prev, self.tail
+        prev.next = node
+        node.prev = prev
+        node.next = next
+        next.prev = node
+
+    def get(self, key: int) -> int:
+        if key in self.cache:
+            node = self.cache[key]
+            self._remove(node)  # Move node to the end to mark it as recently used
+            self._add(node)
+            return node.value
+        return -1
+
+    def put(self, key: int, value: int) -> None:
+        if key in self.cache:
+            self._remove(self.cache[key])  # Remove the old node
+        node = Node(key, value)
+        self._add(node)  # Add the new node
+        self.cache[key] = node
+        if len(self.cache) > self.capacity:
+            # Remove the least recently used node
+            lru = self.head.next
+            self._remove(lru)
+            del self.cache[lru.key]
+```
+
 ```python
 class LRUCache:
 
