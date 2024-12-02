@@ -47,3 +47,29 @@ class Solution:
                 ans.append([s, e])
         return ans
 ```
+
+```c++
+class Solution {
+public:
+    vector<vector<int>> merge(vector<vector<int>>& intervals) {
+        int L = intervals.size();
+        if (L == 0)
+            return vector<vector<int>>();
+        
+        std::sort(intervals.begin(), intervals.end(), [](const std::vector<int> &a, const std::vector<int> &b) {
+            return a[0] < b[0];
+        });
+        vector<vector<int>> ans = {intervals[0]};
+        for (int i=1; i < L; i++) {
+            auto se = intervals[i];
+            if (se[0] <= ans[ans.size()-1][1]) {
+                ans[ans.size()-1][1] = max(ans[ans.size()-1][1], se[1]);
+            } else {
+                ans.push_back(se);
+            }
+        }
+        return ans;
+        
+    }
+};
+```
