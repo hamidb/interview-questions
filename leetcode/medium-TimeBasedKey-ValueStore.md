@@ -48,6 +48,27 @@ The timestamps for all TimeMap.set operations are strictly increasing.
 
 Solution
 ========
+```python
+class TimeMap:
+
+    def __init__(self):
+        self.tmap = defaultdict(list)
+        self.vmap = defaultdict(list)    
+
+    def set(self, key: str, value: str, timestamp: int) -> None:
+        self.tmap[key].append(timestamp)
+        self.vmap[key].append(value)
+
+    def get(self, key: str, timestamp: int) -> str:
+        t = self.tmap[key]
+        v = self.vmap[key]
+        if len(t) == 0:
+            return ""
+        i = bisect.bisect_right(t, timestamp)
+        if i-1 < len(t) and i-1 >= 0:
+            return v[i-1]
+        return ""
+```
 
 ```python
 class TimeMap:            
@@ -81,4 +102,51 @@ class TimeMap:
 # obj = TimeMap()
 # obj.set(key,value,timestamp)
 # param_2 = obj.get(key,timestamp)
+```
+
+```c++
+#include <iostream>
+#include <unordered_map>
+#include <vector>
+#include <string>
+#include <algorithm>
+
+using namespace std;
+
+class TimeMap {
+public:
+    TimeMap() {}
+
+    void set(string key, string value, int timestamp) {
+        tmap[key].push_back(timestamp);
+        vmap[key].push_back(value);
+    }
+
+    string get(string key, int timestamp) {
+        // Retrieve the timestamps and values for the key
+        auto &timestamps = tmap[key];
+        auto &values = vmap[key];
+
+        if (timestamps.empty()) {
+            return ""; // No entries for the given key
+        }
+
+        // Find the position of the first timestamp greater than the given timestamp
+        auto it = upper_bound(timestamps.begin(), timestamps.end(), timestamp);
+        
+        // If there is no valid timestamp <= the given timestamp
+        if (it == timestamps.begin()) {
+            return "";
+        }
+
+        // Otherwise, return the value at the last valid timestamp
+        int index = it - timestamps.begin() - 1;
+        return values[index];
+    }
+
+private:
+    unordered_map<string, vector<int>> tmap;  // Maps key to a list of timestamps
+    unordered_map<string, vector<string>> vmap;  // Maps key to a list of values
+};
+
 ```
