@@ -77,6 +77,7 @@ It is guaranteed that all the employees can be informed.
 
 Solution
 ========
+BFS -> recursion
 ```python
 # O(N)
 class Solution:
@@ -96,6 +97,30 @@ class Solution:
             time = self.getTime(c, tree, informTime)
             max_time = max(max_time, time)
         return max_time + informTime[root]
-        
+```
 
+BFS -> deque
+```python
+class Solution:
+    def numOfMinutes(self, n: int, headID: int, manager: List[int], informTime: List[int]) -> int:
+        # Step 1: Build the tree structure
+        tree = defaultdict(list)
+        for i, m in enumerate(manager):
+            if m != -1:
+                tree[m].append(i)
+        
+        # Step 2: Use a BFS approach to calculate the total time
+        max_time = 0
+        q = deque([(headID, 0)])  # Queue stores (node, time_so_far)
+        
+        while q:
+            node, time_so_far = q.popleft()
+            # Update the maximum time
+            max_time = max(max_time, time_so_far)
+            
+            # Add subordinates to the queue
+            for ch in tree[node]:
+                q.append((ch, time_so_far + informTime[node]))
+        
+        return max_time
 ```
