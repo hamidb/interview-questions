@@ -127,3 +127,61 @@ class Solution(object):
         return result
         
 ```
+
+C++
+```c++
+#include <iostream>
+#include <vector>
+#include <unordered_map>
+#include <queue>
+#include <string>
+#include <algorithm>
+
+using namespace std;
+
+class Word {
+public:
+    string word;
+    int freq;
+
+    Word(string w, int f) : word(w), freq(f) {}
+
+    // Comparator for priority queue
+    bool operator<(const Word& other) const {
+        if (freq == other.freq) {
+            return word > other.word; // Lexicographical order for ties
+        }
+        return freq < other.freq; // Min-heap based on frequency
+    }
+};
+
+class Solution {
+public:
+    vector<string> topKFrequent(vector<string>& words, int k) {
+        // Step 1: Count frequencies
+        unordered_map<string, int> count;
+        for (const auto& word : words) {
+            count[word]++;
+        }
+
+        // Step 2: Create a min-heap (priority queue)
+        priority_queue<Word> minHeap;
+
+        for (const auto& [key, freq] : count) {
+            minHeap.push(Word(key, freq));
+            if (minHeap.size() > k) {
+                minHeap.pop();
+            }
+        }
+
+        // Step 3: Extract top k words
+        vector<string> result(k);
+        for (int i = k - 1; i >= 0; --i) {
+            result[i] = minHeap.top().word;
+            minHeap.pop();
+        }
+
+        return result;
+    }
+};
+```
