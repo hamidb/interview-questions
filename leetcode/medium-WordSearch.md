@@ -48,7 +48,7 @@ Solution
 ========
 
 ```python
-# T: O(NxL^3)  N number of cells and L length of word
+# T: O(Nx3^L)  N number of cells and L length of word
 # worst case we have to process all cells. for each cell, we have 3 directions to go (excluding the cell we came from).
 # S: O(L) recursion depth
 class Solution:
