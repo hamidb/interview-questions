@@ -90,7 +90,7 @@ class Solution:
         # search in [lo-hi] to find the minimum total sweetness per chunk.
         while lo <= hi:
             mid = lo + (hi-lo) // 2
-            if self.canDivide(sweetness, mid) < K+1:
+            if self.canDivide(sweetness, mid) < K+1:  # can divide into k+1 chunks with min sweatness = mid
                 hi = mid-1
             else:
                 lo = mid+1
