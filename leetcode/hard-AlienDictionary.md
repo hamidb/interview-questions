@@ -38,12 +38,32 @@ Explanation: The order is invalid, so return "".
 1 <= words[i].length <= 100
 words[i] consists of only lowercase English letters.
 ```
+### Complexity
 
+Total Time Complexity:
+
+Combining graph construction and topological sorting:
+
+O(N⋅L+C+E)
+
+N⋅L: For comparing adjacent words to build edges.
+
+C+E: For topological sorting.
+
+In the worst case:
+
+C≤26 (number of lowercase English letters).
+
+E≤C^2 (a complete graph).
+
+Thus, the complexity simplifies to:
+
+O(N⋅L+C^2)
+ 
 Solution
 ========
 ```python
-# T: O(C) where C is length of all characters.
-# S: O(C)
+
 class Solution:
     def alienOrder(self, words: List[str]) -> str:
         graph = defaultdict(set)
