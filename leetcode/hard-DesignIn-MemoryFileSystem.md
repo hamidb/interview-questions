@@ -37,6 +37,63 @@ Output:
 
 Solution
 ========
+More readable
+```python
+class FileSystemNode:
+    def __init__(self):
+        self.children = {}  # Directory or file names -> FileSystemNode
+        self.content = ""   # Content for files, empty for directories
+
+
+class FileSystem:
+    def __init__(self):
+        self.root = FileSystemNode()  # Root directory
+
+    def _traverse(self, path: str) -> FileSystemNode:
+        """
+        Traverse the file system to the given path.
+        """
+        current = self.root
+        if path == "/":  # Root directory
+            return current
+        parts = path.split("/")[1:]  # Split path into parts, ignore the leading "/"
+        for part in parts:
+            if part not in current.children:
+                current.children[part] = FileSystemNode()  # Create node if it doesn't exist
+            current = current.children[part]
+        return current
+
+    def ls(self, path: str) -> list[str]:
+        """
+        List directory contents or return the file name.
+        """
+        node = self._traverse(path)
+        if node.content:  # It's a file
+            return [path.split("/")[-1]]
+        # It's a directory, return sorted list of keys in `children`
+        return sorted(node.children.keys())
+
+    def mkdir(self, path: str) -> None:
+        """
+        Create directories in the given path.
+        """
+        self._traverse(path)  # Traverse to the path (creating nodes as needed)
+
+    def addContentToFile(self, filePath: str, content: str) -> None:
+        """
+        Add content to a file. Create the file if it doesn't exist.
+        """
+        node = self._traverse(filePath)
+        node.content += content  # Append content to the file
+
+    def readContentFromFile(self, filePath: str) -> str:
+        """
+        Read the content of a file.
+        """
+        node = self._traverse(filePath)
+        return node.content  # Return the file's content
+
+```
 
 ```python
 # m -> length of path string
