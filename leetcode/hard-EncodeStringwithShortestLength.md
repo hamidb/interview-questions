@@ -61,6 +61,58 @@ Solution
 * `case 3: slide a split point and split s into 2 piece and compute case 1, 2 (e.g. aaaaaabbbbb -> 6[a]5[b])`
 * `take the minimum of case 1, 2, 3`
 
+### GPT solution
+Use a DP table dp[i][j] to represent the shortest encoded string for the substring s[i:j+1].
+
+Steps:
+
+Base Case:
+
+* If the substring length is 1, dp[i][j] = s[i:j+1].
+
+Check for Repetition:
+* For a substring s[i:j+1], check if it can be formed by repeating a smaller substring. For example:
+"aaaa" → "4[a]".
+
+* Check all possible segment lengths k, such that k divides the substring length L.
+
+Partition the Substring:
+* Divide the substring into two parts at every possible position k and combine the results:
+  
+* dp[i][j] = dp[i][k] + dp[k+1][j].
+
+Choose the Shortest:
+* For each substring s[i:j+1], store the shortest encoding.
+  
+```python
+def encode(s: str) -> str:
+    n = len(s)
+    dp = [[""] * n for _ in range(n)]
+    
+    for length in range(1, n + 1):  # Length of the substring
+        for i in range(n - length + 1):  # Start index
+            j = i + length - 1  # End index
+            substring = s[i:j+1]
+            
+            # Initialize with the substring itself
+            dp[i][j] = substring
+            
+            # Try splitting the substring into two parts
+            for k in range(i, j):
+                if len(dp[i][k]) + len(dp[k+1][j]) < len(dp[i][j]):
+                    dp[i][j] = dp[i][k] + dp[k+1][j]
+            
+            # Try encoding the entire substring
+            for k in range(1, length // 2 + 1):  # k is the segment length
+                if length % k == 0 and substring[:k] * (length // k) == substring:
+                    encoded = f"{length // k}[{dp[i][i + k - 1]}]"
+                    if len(encoded) < len(dp[i][j]):
+                        dp[i][j] = encoded
+
+    return dp[0][n-1]
+
+```
+
 ```python
 # T: O(N^3)
 # S: O(N^2)
