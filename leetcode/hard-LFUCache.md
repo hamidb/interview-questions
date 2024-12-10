@@ -103,3 +103,81 @@ class LFUCache:
 # obj.put(key,value)
 ```
 
+C++
+```c++
+#include <unordered_map>
+#include <map>
+#include <list>
+#include <utility>
+
+class LFUCache {
+private:
+    int capacity;
+    int minFreq;
+    
+    // Maps a key to its value and frequency
+    std::unordered_map<int, std::pair<int, int>> key2pair;
+    
+    // Maps a frequency to a doubly linked list of keys
+    std::unordered_map<int, std::list<int>> freq2list;
+    
+    // Maps a key to its position in the doubly linked list
+    std::unordered_map<int, std::list<int>::iterator> key2iter;
+
+    void updateFrequency(int key) {
+        auto [value, freq] = key2pair[key];
+        key2pair[key].second = freq + 1; // Increment frequency
+        
+        // Remove key from current frequency list
+        freq2list[freq].erase(key2iter[key]);
+
+        // If the current frequency was the minimum and its list is now empty, increment minFreq
+        if (freq2list[freq].empty() && freq == minFreq) {
+            minFreq++;
+        }
+
+        // Add key to the new frequency list
+        freq2list[freq + 1].push_front(key);
+        key2iter[key] = freq2list[freq + 1].begin();
+    }
+
+public:
+    LFUCache(int capacity) : capacity(capacity), minFreq(0) {}
+
+    int get(int key) {
+        if (key2pair.find(key) == key2pair.end()) {
+            return -1; // Key not found
+        }
+        
+        // Update frequency
+        updateFrequency(key);
+        return key2pair[key].first;
+    }
+
+    void put(int key, int value) {
+        if (capacity <= 0) return;
+
+        if (key2pair.find(key) != key2pair.end()) {
+            // Key exists, update its value and frequency
+            key2pair[key].first = value;
+            updateFrequency(key);
+            return;
+        }
+
+        if (key2pair.size() >= capacity) {
+            // Evict least frequently used key
+            int evictKey = freq2list[minFreq].back(); // Get the oldest key in the minFreq list
+            freq2list[minFreq].pop_back();
+            key2pair.erase(evictKey);
+            key2iter.erase(evictKey);
+        }
+
+        // Insert new key
+        minFreq = 1;
+        key2pair[key] = {value, 1};
+        freq2list[1].push_front(key);
+        key2iter[key] = freq2list[1].begin();
+    }
+};
+
+```
