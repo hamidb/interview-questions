@@ -115,3 +115,56 @@ class Solution:
         return calculateArea(heights, 0, len(heights) - 1)
 
 ```
+
+C++
+
+```c++
+class Solution {
+public:
+    // We can observe that the max rectangle has at least one bar fully included in the rectangle
+    // for each bar i: 1. if we know the first bar on the left which has h[left] < h[i] 
+    //                 2. and we know the first bar on the right which has h[right] < h[i]
+    //                 3. then max area = (right-left+1) * h[i]
+    // Now we want to find a way to access left and right limits in O(1) using monotonic stack
+    // monotonic increasing -> it always contains increasing values
+    int largestRectangleArea(vector<int>& heights) {
+        int L = heights.size();
+
+        // Find the left limits for each bar i
+        vector<int> left(L);  // index of left limit
+        vector<int> right(L);  // index of right limit        
+        vector<int> stack;
+        for (int i=0; i < L; i++) {
+            while (stack.size() > 0 && heights[stack.back()] >= heights[i]) {
+                stack.pop_back();
+            }
+            if (stack.size() > 0) {
+                left[i] = stack.back() + 1;                
+            } else {
+                left[i] = 0;
+            }
+            stack.push_back(i);
+        }
+
+        stack.clear();
+        for (int i=L-1; i >= 0; i--) {
+            while (stack.size() > 0 && heights[stack.back()] >= heights[i]) {
+                stack.pop_back();
+            }
+            if (stack.size() > 0) {
+                
+                right[i] = stack.back() - 1;
+            } else {
+                right[i] = L-1;
+            }
+            stack.push_back(i);
+        }
+
+        int max_value = 0;
+        for (int i=0; i < left.size(); i++) {
+            max_value = max(max_value, (right[i] - left[i] + 1) * heights[i]);
+        }
+        return max_value;
+    }
+};
+```
