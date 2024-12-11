@@ -28,6 +28,16 @@ s consists of lowercase English letters.
 
 Solution
 ========
+```python
+hash of "cli"
+L = 3
+q = 1001
+base = 26
+
+hash = ('c' * 26^2) + ('l' * 26^1) + ('i' * 26^0) % 1001
+hash[0] = 0
+hash[i+1] = (hash[i] * base) % q
+```
 
 ```python
 # T: O(NlogN)
