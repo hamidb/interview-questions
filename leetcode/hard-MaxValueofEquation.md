@@ -44,7 +44,8 @@ Solution
 # T: O(N log K)
 # S: O(K)
 # Value = yi + yj + |xi - xj|
-# Value = yj - xj + yi + xi  because xi < xj
+# becoms:
+# Value = yj - xj + yi + xi  because xi < xj (the x values are sorted)
 # max Value = max(yj-xj) + yi+xi for each i
 class Solution:
     def findMaxValueOfEquation(self, points: List[List[int]], k: int) -> int:
@@ -53,7 +54,7 @@ class Solution:
         heapq.heappush(pq, ((-points[0][1] + points[0][0]), points[0][0]))
         ans = float('-inf')
         for xi, yi in points[1:]:
-            while pq and xi - pq[0][1] > k:
+            while pq and xi - pq[0][1] > k:  # xi-xj <= k
                 heapq.heappop(pq)
             if pq:
                 ans = max(ans, -pq[0][0] + xi + yi)
