@@ -56,7 +56,11 @@ location.length == 2
 
 Solution
 ========
-
+Why Wraparound is Necessary
+Without duplication, angles near 
+360∘ (e.g., 350∘) and 0∘ (e.g., 10∘) would not be adjacent in the sorted list. Adding 
+360∘ allows us to treat them as continuous, enabling the sliding window to work seamlessly.
+  
 ```python
 # T:O(nlogn)
 # S: O(n)
