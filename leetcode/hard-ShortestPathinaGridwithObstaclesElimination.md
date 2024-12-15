@@ -83,3 +83,35 @@ class Solution:
                     visited[y][x] = kk
         return -1
 ```  
+
+```python
+# class Solution:
+#     def shortestPath(self, grid: List[List[int]], k: int) -> int:
+#         rows = len(grid)
+#         cols = len(grid[0]) if rows else 0
+#         if k >= cols+rows-2:
+#             return cols+rows-2
+        
+#         visited = [[-1]*cols for _ in range(rows)]
+#         if grid[0][0] == 1:
+#             k -= 1
+#         visited[0][0] = k
+#         q = deque([(0, 0, 0, k)])
+        
+#         while q:
+#             cost, r, c, kk = q.popleft()            
+#             for dx, dy in [[0, 1], [1, 0], [0, -1], [-1, 0]]:
+#                 rr = r + dx
+#                 cc = c + dy
+#                 if rr < 0 or cc < 0 or cc >= cols or rr >= rows:
+#                     continue
+#                 p = kk - grid[rr][cc]
+#                 if p <= visited[rr][cc]:
+#                     continue
+#                 if (rr, cc) == (rows-1, cols-1):
+#                     return cost+1
+#                 q.append((cost+1, rr, cc, p))
+#                 visited[rr][cc] = p
+#         return -1
+
+```
