@@ -47,18 +47,21 @@ Solution
 class Solution:
     def shortestSubarray(self, nums: List[int], k: int) -> int:
         n = len(nums)
-        P = [0]
-        for x in nums:
-            P.append(x+P[-1])
+        mx_len = n+1
+        prefix_sum = [0]
+        for num in nums:
+            prefix_sum.append(num+prefix_sum[-1])
         
-        q = deque()
-        ans = n+1  # max possible value
+        q = deque([]) # keeps index only in monotonically decreasing order
         for i in range(n+1):
-            while q and P[q[-1]] >= P[i]:
+            # keep poping until right of q >= current sum
+            while q and prefix_sum[q[-1]] >= prefix_sum[i]: 
                 q.pop()
-            while q and P[i] - P[q[0]] >= k:  # satisfiy condition
-                ans = min(ans, (i-q.popleft())) # len = i - q[0]
+
+            # check from left to find the best index that satisfies the condition
+            while q and prefix_sum[i] - prefix_sum[q[0]] >= k:
+                mx_len = min(mx_len, i-q.popleft())
             q.append(i)
-        
-        return ans if ans < n+1 else -1
+
+        return mx_len if mx_len != n+1 else -1
 ```
