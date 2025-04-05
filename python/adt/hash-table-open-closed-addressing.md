@@ -1,5 +1,5 @@
 
-
+![Visualization](images/image0001.png)
 ### ClosedAddressingHashTable with linked list
 
 ```python
