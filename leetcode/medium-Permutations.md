@@ -28,7 +28,6 @@ Output: [[1]]
 All the integers of nums are unique.
 ```
 
-```
 Solution
 ========
 
